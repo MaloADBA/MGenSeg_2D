@@ -10,7 +10,7 @@ Run "git submodule init" to initialize submodules.
 
 Run "git submodule update" to download submodules.
 
-## This repo handles several domain adaptation models for cross-modality segmentation :
+## This repo handles several domain adaptation and baseline models for cross-modality segmentation :
 
 'M-GenSeg' (https://arxiv.org/abs/2212.07276)
 
@@ -18,7 +18,7 @@ Run "git submodule update" to download submodules.
 
 'AttENT' (https://ieeexplore.ieee.org/document/9669620)
 
-'UAGAN' (https://arxiv.org/abs/1907.03548)
+'UAGAN' (https://arxiv.org/abs/1907.03548) --> For comparison with a fully supervised model
 
 'Supervised TransUnet' (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
 
@@ -32,51 +32,62 @@ We use the 2020 version of the BRATS data from https://www.med.upenn.edu/cbica/b
 python scripts/data_preparation/Prepare_multimodal_brats_2D.py --data_dir "<download_dir>" --save_to "/path/data.h5" --min_tumor_fraction 0.01 --min_brain_fraction 0.25 --no_crop --skip_bias_correction
 
 ```
-Data preparation creates a new dataset based on BRATS that contains 2D hemispheres, split into sick and healthy subsets for each possible contrast (T1,T1ce,FLAIR,T2).
+Data preparation creates a new dataset based on BRATS that contains 2D hemispheres, split into sick and healthy subsets for each possible contrast (T1, T1ce, FLAIR, T2).
 
 ### Launching experiments
 
+Run "source register submodules.sh"
+
 #### Launching training for MGenSeg
 
-In this example, the following model configuration is used:
-`model/configs/brats_2017/bds3/bds3_003_xid50_cyc50.py`
+In this example, we used the MGenSeg variant with attention gates as skip-connections :
+`model/configs/mbrats/bds3_106_sc_residual_attention_ulti_nmsc_dif.py`
 
-In this specific configuration file, the decoder is mostly shared for the segmentation path. When run in `mode=0` (passed in `forward` call; default), the decoder outputs an image, with `tanh` normalization at the output; when run in `mode=1`, it outputs a segmentation mask, with `sigmoid` normalization at the output. Modes 0 and 1 differ in three ways:
+In our configurations, the decoders are mostly shared for the segmentation path. When run in `mode=0` (passed in `forward` call; default), the decoder outputs an image, with `tanh` normalization at the output; when run in `mode=1`, it outputs a segmentation mask, with `sigmoid` normalization at the output. Modes 0 and 1 differ in three ways:
 1. The final norm/nonlinearity/convolution block is unique for each mode.
 2. The final nonlinearity is `tanh` in mode 0 and `sigmoid` in mode 1.
-3. Every block in the decoder is normalized with `layer_normalization` in mode 0 and with adaptive instance normalization in mode 1.
-Adaptive instance normalization uses parameters predicted by an MLP when the decoder is run in mode 0. They are passed to the mode 1 decoder as `skip_info`.
+3. Every block in the decoder is normalized with its own set of normalization parameters.
 
 An example of an experiment launched with this config is:
 ```
-python brats_segmentation.py --path "experiments/brats_2017/bds3/bds3_003_xid50_cyc50 (f0.01, D_lr 0.001) [b0.3]" --model_from model/configs/brats_2017/bds3/bds3_003_xid50_cyc50.py --batch_size_train 20 --batch_size_valid 20 --epochs 1000000 --rseed 1234 --optimizer '{"G": "amsgrad", "D": "amsgrad"}' --opt_kwargs '{"G": {"betas": [0.5, 0.999], "lr": 0.001}, "D": {"betas": [0.5, 0.999], "lr": 0.01}}' --n_vis 8 --weight_decay 0.0001 --dataset brats17 --orientation 1 --data_dir=./data/brats/2017/hemispheres_b0.3_t0.01/ --labeled_fraction 0.01 --augment_data --nb_proc_workers 2
+python3 mbrats_segmentation_ulti_nmsc_dif.py --data /path/Data/mbrats/ --path /log_and_save_model_to/ --model_from model/configs/mbrats/bds3_106_sc_residual_attention_ulti_nmsc_dif.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 20, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --source_modality 't1' --target_modality 't2' --labeled_fraction_source 1 --labeled_fraction_target 0  --batch_size_train 15 --batch_size_valid 15 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 1234 --data_seed 0 
 ```
 
 Optimizer arguments are passed as a JSON string through the `--opt_kwargs` argument.
 
-Note that if `CUDA_VISIBLE_DEVICES` is not set to specify which GPUs to use, the model will attempt to use all available GPUs. The code is multi-GPU capable but no serious training has been done on multiple GPUs. Use multiple GPUs with caution. There have been bugs in pytorch (hopefully fixed now) that made it either cause some layers to fail to be updated or fail to be resumed.
+Loss hyperparameters can be changed in the `--model_kwargs` argument.
 
-#### Example: resuming a brats experiment
+Pick source and target contrasts (t1, t1ce, flair or t2) with `--source_modality` and `--target_modality` arguments.
 
-Resuming the above experiment could be done with:
+Select the % of annotated data that is fed to the network with `--labeled_fraction_source` and `--labeled_fraction_target` arguments.
+
+Note that we do not handle training on multiple GPUs.
+
+#### Launching training for Baselines
+
+Same can be done for AccSegNet :
 ```
-python brats_segmentation.py --path "experiments/brats_2017/bds3/bds3_003_xid50_cyc50 (f0.01, D_lr 0.001) [b0.3]"
+python3 mbrats_accsegnet.py --data /path/Data/mbrats/ --path /log_and_save_model_to/accsegnet/ --model_from "model/configs/mbrats/accsegnet.py" --model_kwargs '{"lambda_disc": 1, "lambda_seg": 1, "lambda_anatomy": 1, "lambda_contraste": 2, "lambda_id": 1}' --weight_decay 0.0001 --source_modality 't2' --target_modality 't1' --labeled_fraction_source 1 --labeled_fraction_target 0 --batch_size_train 10 --batch_size_valid 10 --epochs 300 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 10 --init_seed 1111 --data_seed 0
 ```
 
-Upon resuming, the model configuration file is loaded from the saved checkpoint. All arguments passed upon initializing the experiment are loaded as well. **Any of these can be over-ridden by simply passing them again with the resuming command.**
+And UAGAN :
+```
+python3 mbrats_uagan.py --data /path/Data/mbrats/ --path /log_and_save_model_to/uagan/ --model_from "model/configs/mbrats/uagan.py" --model_kwargs '{"lambda_seg": 20, "lambda_id": 1, "lambda_disc": 1, "lambda_class": 10, "lambda_gp": 0}' --source_modality 't1' --target_modality 't2' --weight_decay 0.0001 --batch_size_train 1 --batch_size_valid 1 --epochs 200 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer adam --augment_data --nb_proc_workers 2 --n_vis 10 --init_seed 1234 --data_seed 0 
+```
 
-## Dispatching on a Compute Canada
+And supervised TransUnet (with the `--yield_only_labeled` argument, only labeled data is passed to the model):
+```
+python3 mbrats_segmentation_transunet.py --data /path/Data/mbrats/ --path /log_and_save_model_to/transunet/ --model_from "model/configs/mbrats/Transunet.py" --weight_decay 0.0001 --batch_size_train 10 --batch_size_valid 10 --epochs 201 --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 8 --init_seed 1234 --data_seed 0 --source_modality 't1' --target_modality 't2' --labeled_fraction_source 1 --labeled_fraction_target 0 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --yield_only_labeled
+```
 
-Experiments should be launched from one of the login nodes of a compute canada cluster. The launcher then sets up and queues the job on the cluster.
+AttENT is a 2 stages method, so first train modality translation with :
+```
+python3 mbrats_attnet_trans.py --data /path/Data/mbrats/ --path /log_and_save_model_to/attnet/trans/ --model_from "model/configs/mbrats/attnet_trans.py" --model_kwargs '{"lambda_disc": 1, "lambda_cyc": 4}' --source_modality 't1' --target_modality 'flair' --weight_decay 0.0001 --batch_size_train 10 --batch_size_valid 10 --epochs 100 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 10 --init_seed 1234 --data_seed 0
+```
 
-Note: SLURM setup for compute canada could be easily extended to other SLURM based clusters.
+Then run the 'scripts/data_preparation/compute_translation_attnet_mbrats.py' file to generate the synthetic target modality datasets.
 
-To the task arguments, add the argument `--dispatch_dgx`, along with any aditional DGX-specific arguments:
-
-`--account` : the compute canada account to use for requesting resources  
-`--cca_gpu` : number of GPUs to request  
-`--cca_cpu` : number of CPU cores to request  
-`--cca_mem` : amount of memory to request, as a string (eg. '12G')  
-`--time` : the amount of time to request the job for (see `sbatch` time syntax)  
-
-When dispatching on a compute canada cluster, a daemon is created that requeues any jobs that time out, allowing them to resume. This allows requesting a short run time which makes it much more likely to get high priority resources; an optimal run time request is for 3h (`--time "3:0:0"`).
+Finally run the segmentation part with  : 
+```
+python3 mbrats_attnet_seg.py --data /path/Data/mbrats/attent/t1_flair.h5'' --path /log_and_save_model_to/attnet/seg/ --model_from "model/configs/mbrats/attnet_seg.py" --model_kwargs '{"lambda_disc_main": 0.001, "lambda_disc_aux": 0.0002, "lambda_seg_main": 1, "lambda_seg_aux": 0.1}' --weight_decay 0.0001 --source_modality 't1' --target_modality 'flair' --labeled_fraction_1 1 --labeled_fraction_2 0 --batch_size_train 25 --batch_size_valid 25 --epochs 200 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer adam --augment_data --nb_proc_workers 2 --n_vis 10 --init_seed 1234 --data_seed 0
+```
