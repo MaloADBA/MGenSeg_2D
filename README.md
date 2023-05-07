@@ -22,75 +22,21 @@ Run "git submodule update" to download submodules.
 
 'Supervised TransUnet' (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
 
+## Task : Cross-modality tumor segmentation with BRATS
 
-A model is a pytorch module that determines compute and update rules. It takes sub-network definitions as initialization arguments (eg. encoder, decoders, discriminators, etc.).
+We build an unsupervised domain adaptation task with BraTS where each MR contrast (T1,T1ce,FLAIR,T2) is considered as a distinct modality. The models provided aim at reaching good segmentation performances on an unlabeled target modality dataset by leveraging annotated source images of an other modality.
 
-A model is instantiated in a *configuration file* with a `build_model()` function. Any other code/functions could exist in the file to help with building all sub-networks, etc. The `build_model()` function must return one of the following:  
-1. An instantiated model.  
-2. A dictionary containing the instantiated model and any other models.  
-
-Option (2) is useful when the model contains subnetworks that are trained by separate optimizers. In that case, an optimizer is created for every item in the dictionary. Separate optimization methods and optimizer parameters could be passed to each optimizer via the arguments to the task launchers.
-
-Example of option (2), where discriminators are trained separately:
-```python
-def build_model():
-    # Code setting up model.
-    return {'G' : model,
-            'D' : nn.ModuleList([model.separate_networks['disc_A'],
-                                 model.separate_networks['disc_B']])}
-```
-
-## Tasks
-
-`brats_segmentation.py` : BRATS  
-`cluttered_mnist_segmentation.py` : Cluttered MNIST  
-`ddsm_segmentation.py` : DDSM
-
-Task launchers are used to start/resume an experiment.
-
-### BRATS
-
-This is the 2017 version of the BRATS (brain tumour segmentation) data from https://www.med.upenn.edu/sbia/brats2017/data.html. Once downloaded to `<download_dir>`, this data can be prepared for training using a provided script, as follows:
-```
-python scripts/data_preparation/prepare_brats_data_hemispheres.py --data_dir <download_dir>/HGG --save_to data/brats_2017_b0.25_t0.01/hgg.h5 --min_tumor_fraction 0.01 --min_brain_fraction 0.25
-```
-```
-python scripts/data_preparation/prepare_brats_data_hemispheres.py --data_dir <download_dir>/LGG --save_to data/brats_2017_b0.25_t0.01/lgg.h5 --min_tumor_fraction 0.01 --min_brain_fraction 0.25
-```
-Data preparation creates a new dataset based on BRATS that contains 2D hemispheres, split into sick and healthy subsets.
-
-### LiTS
-
-This is the 2017 Liver Tumour Segmentation (LiTS) challenge data from the https://competitions.codalab.org/competitions/17094. After downloading this data to `<download_dir>/Training_Batch1.zip` and `<download_dir>/Training_Batch2.zip`, it must be unzipped to some `<data_dir>` and the `.nii` NIFTI files must be gunzip compressed to `.nii.gz` files, as follows (in BASH):
-```
-for fn in <download_dir>/Training_Batch{1,2}.zip; do unzip -j $fn -d <data_dir>; done
-for fn in <data_dir>/*.nii; do echo "Compressing $fn" && gunzip $fn; done
-```
-This data can then be prepared for training using as a provided script, as follows:
-```
-python scripts/data_preparation/prepare_lits.py <data_dir> --path_create data/lits/lits.h5
-```
-
-### MNIST
-
-The cluttered MNIST digit data is created automatically by the MNIST task launcher from MNIST data that is also downloaded automatically.
-
-### DDSM
-
-The DDSM breast cancer data consists of DDSM data (http://www.eng.usf.edu/cvprg/Mammography/Database.html) with CBIS-DDSM (https://wiki.cancerimagingarchive.net/display/Public/CBIS-DDSM) annotations for sick cases. To prepare DDSM data for training, these two sets of data need to be downloaded to `<ddsm_download_dir>` and `<cbis_download_dir>`, respectively. The raw DDSM data can be downloaded from its original FTP source using the following script:
+We use the 2020 version of the BRATS data from https://www.med.upenn.edu/cbica/brats2020/data.html. Once downloaded to `<download_dir>`, this data can be prepared for domain adaptation tasks using a provided script, as follows:
 
 ```
-python scripts/data_preparation/download_ddsm.py <ddsm_download_dir>
-```
+python scripts/data_preparation/Prepare_multimodal_brats_2D.py --data_dir "<download_dir>" --save_to "/path/data.h5" --min_tumor_fraction 0.01 --min_brain_fraction 0.25 --no_crop --skip_bias_correction
 
-Once downloaded, the dataset can be prepared as follows:
 ```
-python scripts/data_preparation/prepare_ddsm_data.py <ddsm_download_dir> <cbis_download_dir> --path_create data/ddsm/ddsm.h5 --resize 256
-```
+Data preparation creates a new dataset based on BRATS that contains 2D hemispheres, split into sick and healthy subsets for each possible contrast (T1,T1ce,FLAIR,T2).
 
-### Launching
+### Launching experiments
 
-#### Example: launching a BRATS experiment
+#### Launching training for MGenSeg
 
 In this example, the following model configuration is used:
 `model/configs/brats_2017/bds3/bds3_003_xid50_cyc50.py`
