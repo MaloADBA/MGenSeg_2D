@@ -1,18 +1,23 @@
-# Cross-Modality segmentation
+# Cross-Modality segmentation : M-GenSeg 2D (https://arxiv.org/abs/2212.07276)
 
 ## Initialization
 
-Run pip install -r requirements.txt to install dependencies. 
+Clone repo "git clone https://github.com/MaloADBA/MGenSeg_2D.git"
 
-Run git submodule init to initialize submodules.
+Run "pip install -r requirements.txt" to install dependencies. 
 
-Run git submodule update to download submodules.
+Run "git submodule init" to initialize submodules.
 
-## Models
+Run "git submodule update" to download submodules.
 
-`models/bd_segmentation.py` : model 3  
-`models/bd_segmentation_residual.py` : model 2  
-`models/ae_segmentation.py` : autoencoding+segmentation  
+## This repo handles several domain adaptation models for cross-modality segmentation :
+
+'M-GenSeg (https://arxiv.org/abs/2212.07276)
+'AccSegNet (https://link.springer.com/chapter/10.1007/978-3-030-87193-2_5)
+'AttENT (https://ieeexplore.ieee.org/document/9669620)
+'UAGAN (https://arxiv.org/abs/1907.03548)
+'Supervised TransUnet (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
+
 
 A model is a pytorch module that determines compute and update rules. It takes sub-network definitions as initialization arguments (eg. encoder, decoders, discriminators, etc.).
 
