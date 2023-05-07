@@ -3,7 +3,9 @@
 ## Initialization
 
 Run pip install -r requirements.txt to install dependencies. 
+
 Run git submodule init to initialize submodules.
+
 Run git submodule update to download submodules.
 
 ## Models
