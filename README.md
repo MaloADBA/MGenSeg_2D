@@ -12,11 +12,15 @@ Run "git submodule update" to download submodules.
 
 ## This repo handles several domain adaptation models for cross-modality segmentation :
 
-'M-GenSeg (https://arxiv.org/abs/2212.07276)
-'AccSegNet (https://link.springer.com/chapter/10.1007/978-3-030-87193-2_5)
-'AttENT (https://ieeexplore.ieee.org/document/9669620)
-'UAGAN (https://arxiv.org/abs/1907.03548)
-'Supervised TransUnet (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
+'M-GenSeg' (https://arxiv.org/abs/2212.07276)
+
+'AccSegNet' (https://link.springer.com/chapter/10.1007/978-3-030-87193-2_5)
+
+'AttENT' (https://ieeexplore.ieee.org/document/9669620)
+
+'UAGAN' (https://arxiv.org/abs/1907.03548)
+
+'Supervised TransUnet' (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
 
 
 A model is a pytorch module that determines compute and update rules. It takes sub-network definitions as initialization arguments (eg. encoder, decoders, discriminators, etc.).
