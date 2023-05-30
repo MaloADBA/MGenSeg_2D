@@ -1,6 +1,7 @@
 # Cross-Modality segmentation : M-GenSeg 2D (https://arxiv.org/abs/2212.07276)
 
 ![Screenshot](M-GenSeg-combined-compact.png)
+
 ## Initialization
 
 Clone repo "git clone https://github.com/MaloADBA/MGenSeg_2D.git"
