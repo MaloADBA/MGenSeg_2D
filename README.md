@@ -78,7 +78,8 @@ We make available 4 pretrained models, respectively corresponding to T1ce --> FL
 They are available here : https://drive.google.com/drive/folders/1aqn3FHr_xBl2_Mw4B9E0vMJ_jjmuIiTQ?usp=sharing
 
 To load the models, use the following code :
-
+```
+from utils.experiment import experiment
 from mbrats_segmentation_ulti_nmsc_dif import get_parser as get_model_parser
 def load_model(experiment_path): 
     # Load args.
@@ -92,6 +93,7 @@ def load_model(experiment_path):
     experiment_state = experiment(model_args)
     model = experiment_state.model['G']
     return model
+```
 
 #### Launching training for Baselines
 
