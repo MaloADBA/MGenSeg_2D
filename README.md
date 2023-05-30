@@ -24,7 +24,7 @@ Run "git submodule update" to download submodules.
 
 'Supervised TransUnet' (https://arxiv.org/abs/2102.04306) --> For comparison with a fully supervised model
 
-## Task : Cross-modality tumor segmentation with BRATS
+## Task : domain adaptation for tumor segmentation with BRATS
 
 We build an unsupervised domain adaptation task with BraTS where each MR contrast (T1,T1ce,FLAIR,T2) is considered as a distinct modality. The models provided aim at reaching good segmentation performances on an unlabeled target modality dataset by leveraging annotated source images of an other modality.
 
@@ -62,6 +62,12 @@ Loss hyperparameters can be changed in the `--model_kwargs` argument.
 Pick source and target contrasts (t1, t1ce, flair or t2) with `--source_modality` and `--target_modality` arguments.
 
 Select the % of annotated data that is fed to the network with `--labeled_fraction_source` and `--labeled_fraction_target` arguments.
+
+As the workflow is symmetrical with regard to source and target modalities, using the following parameters is equivalent to the one mentionned above :
+
+```
+python3 mbrats_segmentation_ulti_nmsc_dif.py --data /path/Data/mbrats/ --path /log_and_save_model_to/ --model_from model/configs/mbrats/bds3_106_sc_residual_attention_ulti_nmsc_dif.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 20, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --source_modality 't2' --target_modality 't1' --labeled_fraction_source 0 --labeled_fraction_target 1  --batch_size_train 15 --batch_size_valid 15 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 1234 --data_seed 0 
+```
 
 Note that we do not handle training on multiple GPUs.
 
