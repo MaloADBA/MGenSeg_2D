@@ -71,6 +71,28 @@ python3 mbrats_segmentation_ulti_nmsc_dif.py --data /path/Data/mbrats/ --path /l
 
 Note that we do not handle training on multiple GPUs.
 
+#### Pretrained models
+
+We make available 4 pretrained models, respectively corresponding to T1ce --> FLAIR, FLAIR --> T2, T2 --> T1, T1 --> T1ce domain adaptations where 100% of source data is annotated and 0% of target data is annotated.
+
+They are available here : https://drive.google.com/drive/folders/1aqn3FHr_xBl2_Mw4B9E0vMJ_jjmuIiTQ?usp=sharing
+
+To load the models, use the following code :
+
+from mbrats_segmentation_ulti_nmsc_dif import get_parser as get_model_parser
+def load_model(experiment_path): 
+    # Load args.
+    print("Loading experiment arguments.")
+    args_path = os.path.join(experiment_path, 'args.txt')
+    model_parser = get_model_parser()
+    with open(args_path, 'r') as f:
+        saved_args = f.read().split('\n')[1:]
+        saved_args[saved_args.index('--path')+1] = experiment_path
+        model_args = model_parser.parse_args(args=saved_args)
+    experiment_state = experiment(model_args)
+    model = experiment_state.model['G']
+    return model
+
 #### Launching training for Baselines
 
 Same can be done for AccSegNet :
