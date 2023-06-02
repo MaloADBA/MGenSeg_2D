@@ -1,5 +1,4 @@
 # # MGenSeg with skinny cat skip connections
-
 from collections import OrderedDict
 import torch
 from torch import nn
