@@ -1,5 +1,4 @@
 from typing import List, Optional, Dict, cast
-
 import tensorflow as tf
 from tensorflow.keras.layers import Layer
 
