@@ -10,7 +10,6 @@ from ._einmix import _EinmixMixin
 
 __author__ = 'Alex Rogozhnikov'
 
-
 class Reduce(nn.Module):
     pattern: str
     reduction: str
