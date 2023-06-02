@@ -4,7 +4,6 @@ import oneflow as flow
 
 from . import RearrangeMixin, ReduceMixin
 from ._einmix import _EinmixMixin
-
 __author__ = 'Tianhe Ren & Depeng Liang'
 
 
