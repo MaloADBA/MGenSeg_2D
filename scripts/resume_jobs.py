@@ -4,7 +4,6 @@ import os
 import re
 import subprocess
 
-
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('job_dirs', nargs='+', type=str,
