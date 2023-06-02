@@ -1,7 +1,6 @@
 from typing import Optional, Dict, cast
 
 import torch
-
 from . import RearrangeMixin, ReduceMixin
 from ._einmix import _EinmixMixin
 from .._torch_specific import apply_for_scriptable_torch
