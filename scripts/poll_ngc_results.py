@@ -11,7 +11,6 @@ import subprocess
 import sys
 import time
 
-
 def get_args():
     parser = argparse.ArgumentParser(description="NGC results polling.")
     parser.add_argument('--working_dir', type=str, default='./.ngc_meta',
