@@ -1,5 +1,4 @@
 # AttENT segmentation encoder decoder
-
 from collections import OrderedDict
 import torch
 from torch import nn
