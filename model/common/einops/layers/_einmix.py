@@ -6,7 +6,6 @@ import warnings
 import string
 from ..einops import _product
 
-
 def _report_axes(axes: set, report_message: str):
     if len(axes) > 0:
         raise EinopsError(report_message.format(axes))
