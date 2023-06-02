@@ -1,5 +1,4 @@
 # Translation model for AttENT
-
 from collections import OrderedDict
 import torch
 from torch import nn
