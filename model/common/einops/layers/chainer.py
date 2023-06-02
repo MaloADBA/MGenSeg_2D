@@ -7,7 +7,6 @@ from ._einmix import _EinmixMixin
 
 __author__ = 'Alex Rogozhnikov'
 
-
 class Rearrange(RearrangeMixin, chainer.Link):
     def __call__(self, x):
         return self._apply_recipe(x)
