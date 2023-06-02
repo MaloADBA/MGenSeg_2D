@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from utils.logging import parse_log_file
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Parse log files")
     parser.add_argument('--logname', type=str, default='')
