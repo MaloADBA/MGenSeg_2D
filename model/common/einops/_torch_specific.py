@@ -3,7 +3,6 @@ Specialization of einops for torch.
 Unfortunately, torch's jit scripting mechanism isn't strong enough,
 and to have scripting supported at least for layers,
 a number of changes is required, and this layer helps.
-
 Importantly, whole lib is designed so that you can't use it
 """
 from typing import Dict, List
