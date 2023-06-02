@@ -1,7 +1,6 @@
 """
 
 Indexing one array with the other(s).
-
 Concept for discussion.
 
 Notation targets hard cases, not simple ones, like indexing of 1d-array with another 1d-array
