@@ -10,7 +10,6 @@ try:
     import queue            # python 3
 except ImportError:
     import Queue as queue   # python 2
-
 import numpy as np
 import scipy.misc
 from scipy import ndimage
