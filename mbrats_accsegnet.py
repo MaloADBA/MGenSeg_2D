@@ -5,7 +5,6 @@ import json
 from utils.dispatch import (dispatch,
                             dispatch_argument_parser)
 
-
 '''
 Process arguments.
 '''
