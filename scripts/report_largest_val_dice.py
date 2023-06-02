@@ -4,7 +4,6 @@ import shutil
 import subprocess
 import re
 
-
 def get_args():
     parser = argparse.ArgumentParser(description=''
         'Get the largest validation Dice score from `val_log.txt` in every '
