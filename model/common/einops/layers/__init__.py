@@ -8,7 +8,6 @@ from einops.einops import _apply_recipe
 from ..einops import TransformRecipe, _prepare_transformation_recipe
 from .. import EinopsError
 
-
 class RearrangeMixin:
     """
     Rearrange layer behaves identically to einops.rearrange operation.
