@@ -14,7 +14,7 @@ Run "git submodule update" to download submodules.
 
 ## This repo handles several domain adaptation and baseline models for cross-modality segmentation :
 
-'M-GenSeg' (https://arxiv.org/abs/2212.07276)
+'M-GenSeg'
 
 'AccSegNet' (https://link.springer.com/chapter/10.1007/978-3-030-87193-2_5)
 
