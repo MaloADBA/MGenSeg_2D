@@ -11,7 +11,6 @@ import warnings
 
 from natsort import natsorted
 
-
 SBATCH_TIMEOUT = 60
 
 
