@@ -1,4 +1,4 @@
-# Cross-Modality segmentation : M-GenSeg 2D (https://arxiv.org/abs/2212.07276)
+# Cross-Modality segmentation : M-GenSeg 2D
 
 ![Screenshot](M-GenSeg-compact.png)
 
