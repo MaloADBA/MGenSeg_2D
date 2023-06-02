@@ -4,7 +4,6 @@ import numpy as np
 import torch
 from torch.autograd import Variable
 
-
 def _to_cuda(x, device=None):
     x.data = x.data.cuda(device)
     if x._grad is not None:
