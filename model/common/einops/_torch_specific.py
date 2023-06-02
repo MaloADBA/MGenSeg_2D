@@ -7,7 +7,6 @@ a number of changes is required, and this layer helps.
 
 Importantly, whole lib is designed so that you can't use it
 """
-
 from typing import Dict, List
 
 import torch
