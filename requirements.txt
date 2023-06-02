@@ -30,3 +30,4 @@ zarr==2.8.1
 ml_collections
 packaging
 torch
+torch
