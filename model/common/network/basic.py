@@ -20,7 +20,6 @@ from fcn_maker.blocks import (adjust_to_size,
                               shortcut,
                               tiny_block)
 
- 
 def get_output_shape(layer, input_shape):
     """
     Works for `convolution`, `nn.Linear`, `identity_block`, `basic_block`,
