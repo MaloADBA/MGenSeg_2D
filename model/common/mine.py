@@ -4,7 +4,6 @@ from torch import nn
 from torch.nn.utils import spectral_norm
 from torch.autograd import Variable
 
-
 class mine(nn.Module):
     """
     MINE: Mutual information neural estimator.
