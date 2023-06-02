@@ -4,7 +4,6 @@ import string
 import typing
 from collections import OrderedDict
 from typing import Set, Tuple, List, Dict, Union, Callable, Optional, TypeVar, cast, Any
-
 if typing.TYPE_CHECKING:
     import numpy as np
 
