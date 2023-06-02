@@ -2,7 +2,6 @@ import torch
 from ignite.engine import Events
 from ignite.metrics import Metric
 
-
 class metric(Metric):
     """
     Just like ignite's `Metric` except that it computes the metric every
