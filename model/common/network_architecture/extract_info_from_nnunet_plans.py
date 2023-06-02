@@ -1,5 +1,4 @@
 import pickle
-
 from pathlib import Path
 
 def extract_info_from_nnunet_plans(path):
