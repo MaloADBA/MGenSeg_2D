@@ -1,7 +1,6 @@
 import argparse
 import subprocess
 
-
 def get_args():
     parser = argparse.ArgumentParser(description="Filter NGC job list.")
     parser.add_argument('--status', type=str, default='RUNNING',
