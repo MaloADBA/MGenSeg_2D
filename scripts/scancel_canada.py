@@ -3,7 +3,6 @@ import os
 import re
 import subprocess
 
-
 def get_args():
     parser = argparse.ArgumentParser(description="Run scancel on all jobs "
         "associated with each experiment path provided as args.")
