@@ -11,7 +11,6 @@ import random
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-
 """
 AttENT is a two stages method : modality translation + segmentation
 Once the translation model trained this file can be used to generate a synthetic target dataset from source data
