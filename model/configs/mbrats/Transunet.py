@@ -1,6 +1,5 @@
 # TransUnet architecture
 # Change path for pretrained backbone
-
 import copy
 import logging
 import math
