@@ -2,7 +2,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-
 def dist_ratio_mse_abs(prediction, target, eps=1e-7, reduce=False):
     loss = mse(prediction, target, reduce=False)/(mae(prediction, target)+eps)
     if reduce:
