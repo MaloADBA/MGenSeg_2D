@@ -6,7 +6,6 @@ T = TypeVar('T')
 
 Shape = Tuple[int, ...]
 
-
 def pack(pattern: str, tensors: Sequence[T]) -> Tuple[T, List[Shape]]:
     axes = pattern.split()
     if len(axes) != len(set(axes)):
