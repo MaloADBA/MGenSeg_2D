@@ -9,7 +9,6 @@ Backends in `einops` are organized to meet the following requirements
     - this determines which methods (from_numpy/to_numpy or create_symbol/eval_symbol) should be defined
 - if backend can't (temporarily) provide symbols for shape dimensions, UnknownSize objects are used
 """
-
 import sys
 import warnings
 
