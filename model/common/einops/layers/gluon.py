@@ -7,7 +7,6 @@ from ._einmix import _EinmixMixin
 
 __author__ = 'Alex Rogozhnikov'
 
-
 class Rearrange(RearrangeMixin, mxnet.gluon.HybridBlock):
     def hybrid_forward(self, F, x):
         return self._apply_recipe(x)
