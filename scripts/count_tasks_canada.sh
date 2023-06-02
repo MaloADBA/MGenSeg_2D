@@ -5,3 +5,4 @@ N_RUNNING=$(expr $(grep RUNNING <<< "$TMP_SACCT_OUT" |wc -l) / 2)
 echo "$TMP_SACCT_OUT"
 echo ""
 echo "PENDING: $N_PENDING  RUNNING: $N_RUNNING"
+
