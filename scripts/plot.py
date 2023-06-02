@@ -5,7 +5,6 @@ matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('read_path', type=str)
