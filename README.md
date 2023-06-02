@@ -75,7 +75,7 @@ Note that we do not handle training on multiple GPUs.
 
 We make available 4 pretrained models, respectively corresponding to T1ce --> FLAIR, FLAIR --> T2, T2 --> T1, T1 --> T1ce domain adaptations where 100% of source data is annotated and 0% of target data is annotated.
 
-They are available here : (link will be made available after rebuttal as the drive is linked to an anonymous google account) 
+They are available here : (link will be made available after rebuttal as the drive is linked to a none anonymous google account) 
 To load the models, use the following code :
 ```
 from utils.experiment import experiment
