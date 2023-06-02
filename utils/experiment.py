@@ -13,7 +13,6 @@ from ignite.handlers import ModelCheckpoint
 from .radam import RAdam
 from .trackers import progress_report
 
-
 class experiment(object):
     """
     Parse and set up arguments, set up the model and optimizer, and prepare 
