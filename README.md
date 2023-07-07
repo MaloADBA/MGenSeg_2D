@@ -1,6 +1,6 @@
 # Cross-Modality segmentation : M-GenSeg 2D
 
-![Screenshot](M-GenSeg-compact.png)
+![Screenshot](M-GenSeg-final.png)
 
 ## Initialization
 
