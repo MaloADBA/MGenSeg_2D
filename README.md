@@ -126,7 +126,9 @@ python3 mbrats_attnet_seg.py --data /path/Data/mbrats/attent/t1_flair.h5'' --pat
 
 ## Task : cross-pathology and cross-modality domain adaptation for intra-cerebaral hemorrhage CT segmentation with FLAIR glioma MRIs from BraTS
 
+<div align="center">
 ![Screenshot](MR_CT.png)
+</div>
 
 We offer a new task where annotated gliomas in FLAIR sequences from the BraTS dataset can be leveraged to segment intra-cerebral hemorrhages on CT scans from the RSNA 2019 Kaggle challenge (https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection). As these two types of lesions show similar structures and patterns, the cross-pathology and cross-modality segmentation is feasible without any annotation in the CT target modality.
 
