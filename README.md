@@ -124,7 +124,7 @@ python3 mbrats_attnet_seg.py --data /path/Data/mbrats/attent/t1_flair.h5'' --pat
 ```
 
 
-## Task : cross-pathology and cross-modality domain adaptation for intra-cerebaral hemorrhage CT segmentation with FLAIR glioma MRIs from BraTS
+## Task : cross-pathology and cross-modality domain adaptation for intra-cerebaral hemorrhage CT segmentation with FLAIR glioma MRIs
 
 ![Screenshot](MR_CT.png)
 
