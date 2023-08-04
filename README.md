@@ -132,24 +132,24 @@ Once the CT data downloaded, the brain extraction can be performed using the CT_
 
 After the brain extraction, our repository for CT data has the following structure :
 
-CT_data
+<CT_data_dir>
 - Images
     - ID_001
     - ID_002
-    ...
+    - ...
 - Brain_masks (Segmented brain from CT_BET)
     - ID_001
     - ID_002
-    ...
+    - ...
 - Masks (Brain hemorrhages segmentations, optional)
     - ID_001
     - ID_002
-    ...
+    - ...
 
 The data can then be preprocessed (2D slicing and diseased/healthy hemisphere labeling) to be used by M-GenSeg, using the following command:
 
 ```
-python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_download_dir>" --save_to "/path/mr_ct_translation_flair_ss.h5"
+python scripts/data_preparation/Prepare_ct_trans_2d_ss.py --data_dir "<CT_data_dir>" --save_to "/path/mr_ct_translation_ct_ss.h5"
 
 ```
 
