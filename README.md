@@ -126,7 +126,7 @@ python3 mbrats_attnet_seg.py --data /path/Data/mbrats/attent/t1_flair.h5'' --pat
 
 ## Task : cross-pathology and cross-modality domain adaptation for intra-cerebaral hemorrhage CT segmentation with FLAIR glioma MRIs from BraTS
 
-![Screenshot](MR-CT.png)
+![Screenshot](MR_CT.png)
 
 We offer a new task where annotated gliomas in FLAIR sequences from the BraTS dataset can be leveraged to segment intra-cerebral hemorrhages on CT scans from the RSNA 2019 Kaggle challenge (https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection). As these two types of lesions show similar structures and patterns, the cross-pathology and cross-modality segmentation is feasible without any annotation in the CT target modality.
 
@@ -162,6 +162,11 @@ python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_
 
 ```
 
+![Screenshot](mr_ct_pre-processing.png)
+
 ### Launching experiments
 
 python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/home/maloadba/Data/MR_CT/mr_ct_translation_flair_ss.h5' --data_ct '/home/maloadba/Data/MR_CT/mr_ct_translation_ct_ss.h5' --path /scratch/maloadba/experiments/MR_CT/mgenseg/sup/1/ --model_from /home/maloadba/ssl-seg-eugene/model/configs/mr_ct/bds3_mr_ct.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 20, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --labeled_fraction_source 1 --labeled_fraction_target 1  --batch_size_train 10 --batch_size_valid 10 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 1234 --data_seed 0
+
+### Visual results
+![Screenshot](mr_results.png)
