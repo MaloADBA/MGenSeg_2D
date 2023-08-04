@@ -149,14 +149,12 @@ After the brain extraction, our repository for CT data has the following structu
     - ...
 
 The data can then be preprocessed (2D slicing and diseased/healthy hemisphere labeling) to be used by M-GenSeg, using the following command:
-
 ```
 python scripts/data_preparation/Prepare_ct_trans_2d_ss.py --data_dir "<CT_data_dir>" --save_to "/path/mr_ct_translation_ct_ss.h5"
 
 ```
 
 As for source modality, we use the FLAIR sequences from the 2020 BraTS dataset from https://www.med.upenn.edu/cbica/brats2020/data.html. Once downloaded to `<brats_download_dir>`, this data can be prepared for the domain adaptation task (FLAIR extraction, 2D slicing and diseased/healthy hemisphere labeling) using a provided script, as follows:
-
 ```
 python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_download_dir>" --save_to "/path/mr_ct_translation_flair_ss.h5"
 
@@ -166,8 +164,16 @@ python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_
 
 ### Launching experiments
 
+
+Here is the command line to launch a domain adaptation experiment where 100% of the source data (FLAIR glioma) is annotated and 0% of the target data (CT hemorrhage) is provided with annotations:
 ```
 python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/path/mr_ct_translation_flair_ss.h5' --data_ct '/path/mr_ct_translation_ct_ss.h5' --path /log_and_save_model_to/mr_ct/domain_adaptation/ --model_from model/configs/mr_ct/bds3_mr_ct.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 40, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --labeled_fraction_source 1 --labeled_fraction_target 0  --batch_size_train 10 --batch_size_valid 10 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 3333 --data_seed 0
+
+```
+
+Here is the command line for a target supervised training, which acts as the upper bound of the domain adaptation task:
+```
+python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/path/mr_ct_translation_flair_ss.h5' --data_ct '/path/mr_ct_translation_ct_ss.h5' --path /log_and_save_model_to/mr_ct/target_supervised/ --model_from model/configs/mr_ct/bds3_mr_ct.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 0, "lambda_seg": 1, "lambda_x_id": 0, "lambda_z_id": 0, "lambda_mod_disc": 0, "lambda_mod_cyc": 0, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --labeled_fraction_source 1 --labeled_fraction_target 1  --batch_size_train 10 --batch_size_valid 10 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 3333 --data_seed 0
 
 ```
 
