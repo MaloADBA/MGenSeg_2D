@@ -122,3 +122,41 @@ Finally run the segmentation part with  :
 ```
 python3 mbrats_attnet_seg.py --data /path/Data/mbrats/attent/t1_flair.h5'' --path /log_and_save_model_to/attnet/seg/ --model_from "model/configs/mbrats/attnet_seg.py" --model_kwargs '{"lambda_disc_main": 0.001, "lambda_disc_aux": 0.0002, "lambda_seg_main": 1, "lambda_seg_aux": 0.1}' --weight_decay 0.0001 --source_modality 't1' --target_modality 'flair' --labeled_fraction_1 1 --labeled_fraction_2 0 --batch_size_train 25 --batch_size_valid 25 --epochs 200 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer adam --augment_data --nb_proc_workers 2 --n_vis 10 --init_seed 1234 --data_seed 0
 ```
+
+
+## Task : cross-pathology and cross-modality domain adaptation for intra-cerebaral hemorrhage CT segmentation with FLAIR glioma MRIs from BraTS
+
+We offer a new task where annotated gliomas in FLAIR sequences from the BraTS dataset can be leveraged to segment intra-cerebral hemorrhages on CT scans from the RSNA 2019 Kaggle challenge (https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection). As these two types of lesions show similar structures and patterns, the cross-pathology and cross-modality segmentation is feasible without any annotation in the CT target modality.
+
+Once the CT data downloaded, the brain extraction can be performed using the CT_BET pretrained U-Net from https://github.com/aqqush/CT_BET. For our study we use only a subset of the RSNA 2019 Kaggle challenge, where CT hemorrhages were segmented by medical experts (note that this segmented data is not publicly available yet, as it may be used in the future for other tasks/publications). These segmentations only serve the purpose of model evaluation and were not used for training. 
+
+After the brain extraction, our repository for CT data has the following structure :
+
+CT_data
+- Images
+    - ID_001
+    - ID_002
+    ...
+- Brain_masks (Segmented brain from CT_BET)
+    - ID_001
+    - ID_002
+    ...
+- Masks (Brain hemorrhages segmentations, optional)
+    - ID_001
+    - ID_002
+    ...
+
+The data can then be preprocessed (2D slicing and diseased/healthy hemisphere labeling) to be used by M-GenSeg, using the following command:
+
+```
+python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_download_dir>" --save_to "/path/mr_ct_translation_flair_ss.h5"
+
+```
+
+As for source modality, we use the FLAIR sequences from the 2020 BraTS dataset from https://www.med.upenn.edu/cbica/brats2020/data.html. Once downloaded to `<brats_download_dir>`, this data can be prepared for the domain adaptation task (FLAIR extraction, 2D slicing and diseased/healthy hemisphere labeling) using a provided script, as follows:
+
+```
+python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_download_dir>" --save_to "/path/mr_ct_translation_flair_ss.h5"
+
+```
+
