@@ -166,6 +166,9 @@ python scripts/data_preparation/Prepare_flair_trans_2d_ss.py --data_dir "<brats_
 
 ### Launching experiments
 
-python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/home/maloadba/Data/MR_CT/mr_ct_translation_flair_ss.h5' --data_ct '/home/maloadba/Data/MR_CT/mr_ct_translation_ct_ss.h5' --path /scratch/maloadba/experiments/MR_CT/mgenseg/sup/1/ --model_from /home/maloadba/ssl-seg-eugene/model/configs/mr_ct/bds3_mr_ct.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 20, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --labeled_fraction_source 1 --labeled_fraction_target 1  --batch_size_train 10 --batch_size_valid 10 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 1234 --data_seed 0
+```
+python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/path/mr_ct_translation_flair_ss.h5' --data_ct '/path/mr_ct_translation_ct_ss.h5' --path /log_and_save_model_to/mr_ct/domain_adaptation/ --model_from model/configs/mr_ct/bds3_mr_ct.py --model_kwargs '{"lambda_enforce_sum": 1, "lambda_disc": 6, "lambda_seg": 20, "lambda_x_id": 20, "lambda_z_id": 2, "lambda_mod_disc": 3, "lambda_mod_cyc": 40, "lambda_mod_x_id": 0, "lambda_mod_z_id": 0}' --weight_decay 0.0001 --labeled_fraction_source 1 --labeled_fraction_target 0  --batch_size_train 10 --batch_size_valid 10 --epochs 250 --opt_kwargs '{"betas": [0.5, 0.999], "lr": 0.0001}' --optimizer amsgrad --augment_data --nb_proc_workers 2 --n_vis 4 --init_seed 3333 --data_seed 0
+
+```
 
 ![Screenshot](mr_results.png)
