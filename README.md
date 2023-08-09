@@ -179,7 +179,7 @@ python3 mr_ct_segmentation_ulti_nmsc_dif.py --data_mr '/path/mr_ct_translation_f
 ```
 
 #### Pretrained model
-We provide a pretrained model for the domain adaptation task available here : (Set up google drive).
+We provide a pretrained model for the domain adaptation task available here : https://drive.google.com/drive/folders/1ip8ALdTyZtiJom1V1YUP_L1wwyr_mvY_?usp=sharing.
 
 To load the models, use the following code :
 ```
